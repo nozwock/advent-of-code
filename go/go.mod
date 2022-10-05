@@ -1,3 +1,3 @@
-module github.com/nozwock/aoc-2021
+module github.com/nozwock/advent-of-code
 
 go 1.19
