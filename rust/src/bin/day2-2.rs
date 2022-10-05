@@ -9,19 +9,19 @@ fn parse_input(state: &mut SubmarineState, line: &str) -> () {
     let (dir, amount) = line.split_once(" ").unwrap();
     let amount = str::parse::<i32>(amount).unwrap();
 
-    if dir == "forward" {
-        state.forward += amount;
-        state.depth += amount * state.aim;
-        return;
-    } else if dir == "up" {
-        state.aim += -amount;
-        return;
+    match dir {
+        "forward" => {
+            state.forward += amount;
+            state.depth += amount * state.aim;
+        }
+        "up" => {
+            state.aim += -amount;
+        }
+        "down" => {
+            state.aim += amount;
+        }
+        _ => {}
     }
-    state.aim += amount;
-    // } else if dir == "up" {
-    //     return Coordinate { x: 0, y: -amount };
-    // }
-    // return Coordinate { x: 0, y: amount };
 }
 
 fn main() {
