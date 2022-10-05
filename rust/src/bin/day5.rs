@@ -25,7 +25,7 @@ fn parse_input(input: &str) -> Line {
     return Line { p1, p2 };
 }
 
-fn is_h_or_v(line: &Line) -> bool {
+fn is_horv(line: &Line) -> bool {
     return line.p1.x == line.p2.x || line.p1.y == line.p2.y;
 }
 
@@ -33,7 +33,7 @@ fn main() {
     let result: Vec<Line> = get_input()
         .lines()
         .map(parse_input)
-        .filter(is_h_or_v)
+        .filter(is_horv)
         .collect();
 
     println!("{:?}", result);
