@@ -17,10 +17,9 @@ fn parse_input(state: &mut SubmarineState, line: &str) -> () {
         "up" => {
             state.aim += -amount;
         }
-        "down" => {
+        _ => {
             state.aim += amount;
         }
-        _ => {}
     }
 }
 
@@ -33,8 +32,8 @@ fn main() {
     for line in get_input().lines() {
         parse_input(&mut state, line)
     }
-    // hmm fold instead of for loop
-    println!("day2:\n{:?} {}", state, state.forward * state.depth);
+
+    println!("day2 part2:\n{:?} {}", state, state.forward * state.depth);
 }
 
 fn get_input() -> String {
