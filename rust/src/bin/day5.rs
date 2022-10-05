@@ -25,10 +25,18 @@ fn parse_input(input: &str) -> Line {
     return Line { p1, p2 };
 }
 
+fn is_h_or_v(line: &Line) -> bool {
+    return line.p1.x == line.p2.x || line.p1.y == line.p2.y;
+}
+
 fn main() {
-    for item in get_input().lines() {
-        println!("{:?}", parse_input(item));
-    }
+    let result: Vec<Line> = get_input()
+        .lines()
+        .map(parse_input)
+        .filter(is_h_or_v)
+        .collect();
+
+    println!("{:?}", result);
 }
 
 fn get_input() -> String {
