@@ -1,9 +1,13 @@
 #[derive(Debug)]
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+#[derive(Debug)]
 struct Line {
-    x1: i32,
-    y1: i32,
-    x2: i32,
-    y2: i32,
+    p1: Point,
+    p2: Point,
 }
 
 fn parse_input(input: &str) -> Line {
@@ -14,14 +18,11 @@ fn parse_input(input: &str) -> Line {
             return (str::parse::<i32>(x).unwrap(), str::parse::<i32>(y).unwrap());
         })
         .collect();
-    let (x1, y1) = line.get(0).unwrap();
-    let (x2, y2) = line.get(1).unwrap();
-    return Line {
-        x1: *x1,
-        y1: *y1,
-        x2: *x2,
-        y2: *y2,
-    };
+    let p1 = *line.get(0).unwrap();
+    let p1 = Point { x: p1.0, y: p1.1 };
+    let p2 = *line.get(1).unwrap();
+    let p2 = Point { x: p2.0, y: p2.1 };
+    return Line { p1, p2 };
 }
 
 fn main() {
