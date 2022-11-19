@@ -10,42 +10,37 @@ fn main() {
 
     io::stdin().lock().lines().for_each(|binary| {
         binary.unwrap().chars().enumerate().for_each(|(i, c)| {
-            let map = match bit_count.get_mut(i) {
-                Some(map) => map,
+            match bit_count.get_mut(i) {
+                Some(map) => {
+                    map.insert(c, map.get(&c).unwrap_or(&0) + 1);
+                }
                 None => {
-                    bit_count.insert(i, HashMap::new());
-                    bit_count.get_mut(i).unwrap()
+                    bit_count.insert(i, HashMap::from([(c, 1)]));
                 }
             };
-            map.insert(c, map.get(&c).unwrap_or(&0) + 1);
         })
     });
-    dbg!(&bit_count);
+    // dbg!(&bit_count);
 
-    let gamma_rate = bit_count
-        .iter()
-        .map(|m| {
-            let max = m.values().max().unwrap();
-            let mut gamma: char = Default::default();
-            for (k, val) in m {
-                if val == max {
-                    gamma = k.clone();
-                    break;
-                }
+    let mut gamma_rate = String::new();
+    let mut epsilon_rate = String::new();
+    for map in bit_count {
+        let max = map.values().max().unwrap();
+        for (k, v) in &map {
+            if v == max {
+                gamma_rate += &k.to_string();
+                continue;
             }
-            return gamma;
-        })
-        .fold(String::new(), |acc: String, c| format!("{acc}{c}"));
+            epsilon_rate += &k.to_string();
+        }
+    }
     dbg!(&gamma_rate);
-
-    let epsilon_rate = gamma_rate
-        .chars()
-        .map(|c| if c == '0' { '1' } else { '0' })
-        .fold(String::new(), |acc: String, c| format!("{acc}{c}"));
     dbg!(&epsilon_rate);
 
     let gamma_rate = usize::from_str_radix(&gamma_rate, 2).unwrap();
     let epsilon_rate = usize::from_str_radix(&epsilon_rate, 2).unwrap();
+    dbg!(&gamma_rate);
+    dbg!(&epsilon_rate);
 
-    println!("power consumption: {}", gamma_rate * epsilon_rate);
+    println!("power consumption = {}", gamma_rate * epsilon_rate);
 }
