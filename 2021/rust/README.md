@@ -1,4 +1,4 @@
-# 2021 Rust Solutions
+# Rust Solutions
 
 You can run the solutions with their respective inputs like so:
 ```sh

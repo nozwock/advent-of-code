@@ -113,7 +113,7 @@ fn main() {
     let sum = sum_unmarked(&bingo_boards[win_stats.unwrap().0]);
     println!(
         "board `{}` won with a total score of: {}",
-        win_stats.unwrap().0,
+        win_stats.unwrap().0 + 1,
         win_stats.unwrap().1 * sum
     );
 }
