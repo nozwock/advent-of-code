@@ -1,4 +1,5 @@
 // this code is tra...amazing
+// this will crash fantastically for -ve coords :-)
 
 use std::{
     fmt,
@@ -7,8 +8,8 @@ use std::{
 
 #[derive(Debug, PartialEq, PartialOrd, Clone, Copy)]
 struct Point {
-    x: usize,
-    y: usize,
+    x: isize,
+    y: isize,
 }
 
 #[derive(Debug)]
@@ -39,42 +40,35 @@ impl std::ops::Sub for Point {
 }
 
 impl Point {
-    fn new(x: usize, y: usize) -> Self {
+    fn new(x: isize, y: isize) -> Self {
         Self { x, y }
     }
 }
 
 impl Line {
-    /// For horv lines only!
-    ///
-    /// **PANIC:**
-    /// If not a horv line.
     fn to_points(&self) -> Vec<Point> {
-        // omg wth is this code
-        assert!(is_horv(self));
-        let xdiff = self.p2.x as isize - self.p1.x as isize;
-        let mut is_x_common = false;
-        let low_high;
-        if xdiff == 0 {
-            is_x_common = true;
-            low_high = (self.p1.y.min(self.p2.y), self.p2.y.max(self.p1.y));
+        let points;
+        let (xdiff, ydiff) = (self.p2.x - self.p1.x, self.p2.y - self.p1.y);
+        if xdiff != 0 {
+            let slope = ydiff / xdiff;
+            // range over x (since this branch also deals with horizontal lines)
+            let range = (self.p1.x.min(self.p2.x), self.p2.x.max(self.p1.x));
+            points = (range.0..=range.1)
+                .map(|x| Point::new(x, (slope * (x - self.p1.x)) + self.p1.y))
+                .collect();
         } else {
-            low_high = (self.p1.x.min(self.p2.x), self.p2.x.max(self.p1.x));
+            // Special case of undefined slope
+            let range = (self.p1.y.min(self.p2.y), self.p2.y.max(self.p1.y));
+            points = (range.0..=range.1)
+                .map(|y| Point::new(self.p1.x, y))
+                .collect();
         }
-        (low_high.0..=low_high.1)
-            .map(|i| {
-                if is_x_common {
-                    Point::new(self.p1.x, i)
-                } else {
-                    Point::new(i, self.p1.y)
-                }
-            })
-            .collect()
+        points
     }
 }
 
 fn parse_line(input: &str) -> Line {
-    let line: Vec<(usize, usize)> = input
+    let line: Vec<(isize, isize)> = input
         .split("->")
         .map(|s| {
             let (x, y) = s.trim().split_once(",").unwrap();
@@ -102,7 +96,7 @@ fn max_coords(lines: &Vec<Line>) -> Option<(usize, usize)> {
         .iter()
         .map(|line| line.p1.y.max(line.p2.y))
         .max_by_key(|y| *y)?;
-    Some((max_x as usize, max_y as usize))
+    Some((max_x.abs() as usize, max_y.abs() as usize))
 }
 
 /// Panics if points are outside 2d array
@@ -111,7 +105,8 @@ where
     T: std::ops::AddAssign<usize>,
 {
     for point in points {
-        ocean_floor[point.y][point.x] += 1_usize;
+        // hmm this is like a bomb waiting to go out...
+        ocean_floor[point.y.abs() as usize][point.x.abs() as usize] += 1_usize;
     }
 }
 
@@ -147,8 +142,13 @@ where
 fn main() {
     let horv_lines;
     {
-        let input = io::stdin().lock().lines().map(|s| s.unwrap());
+        let input = io::stdin()
+            .lock()
+            .lines()
+            .map(|s| s.unwrap())
+            .collect::<Vec<_>>();
         horv_lines = input
+            .iter()
             .map(|s| parse_line(&s))
             .filter(is_horv)
             .collect::<Vec<_>>();
