@@ -2,7 +2,7 @@ use aoc::day6::*;
 use aoc::prelude::*;
 
 fn main() {
-    let input = get_input().unwrap();
+    let input = get_stdin_input().unwrap();
     let mut lantern_fish = input
         .trim()
         .split(',')

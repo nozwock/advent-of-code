@@ -1,5 +1,3 @@
-use anyhow::Result;
-
 pub struct LanternFish {
     timer: u8,
 }
