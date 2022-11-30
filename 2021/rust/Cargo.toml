@@ -1,5 +1,5 @@
 [package]
-name = "rust"
+name = "aoc"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,3 +7,5 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.65"
+itertools = "0.10.5"
+rayon = "1.6.0"
