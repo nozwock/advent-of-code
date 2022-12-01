@@ -3,6 +3,7 @@ pub mod input;
 
 pub mod prelude {
     pub use crate::input::*;
+    pub use anyhow::{Context, Result};
     pub use itertools::Itertools;
     pub use std::collections::HashMap;
 }

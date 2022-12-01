@@ -1,7 +1,7 @@
 use aoc::prelude::*;
 
-fn main() {
-    let input = get_stdin_input().unwrap();
+fn main() -> Result<()> {
+    let input = get_stdin_input()?;
     // Part 1
     let mut idx = 0;
     let mut elf_food = input.lines().fold(vec![], |mut acc, item| {
@@ -17,14 +17,22 @@ fn main() {
         }
         acc
     });
-    println!("Part 1: {}", elf_food.iter().max().unwrap());
+    println!("Part 1: {}", elf_food.iter().max().context("empty iter")?);
 
     // Part 2
     let mut sum_top3 = 0;
     for _ in 0..3 {
-        let tmp = *elf_food.iter().max().unwrap();
+        let tmp = *elf_food.iter().max().context("empty iter")?;
         sum_top3 += tmp;
-        elf_food.remove(elf_food.iter().find_position(|&&t| t == tmp).unwrap().0);
+        elf_food.remove(
+            elf_food
+                .iter()
+                .find_position(|&&t| t == tmp)
+                .context("not found")?
+                .0,
+        );
     }
     println!("Part 2: {}", sum_top3);
+
+    Ok(())
 }
