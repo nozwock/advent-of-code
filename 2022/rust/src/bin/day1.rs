@@ -1,9 +1,10 @@
 use aoc::prelude::*;
+
 fn main() {
     let input = get_stdin_input().unwrap();
     // Part 1
     let mut idx = 0;
-    let mut elf_food = input.clone().lines().fold(vec![], |mut acc, item| {
+    let mut elf_food = input.lines().fold(vec![], |mut acc, item| {
         if item.is_empty() {
             idx += 1;
         } else {
