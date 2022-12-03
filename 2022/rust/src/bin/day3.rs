@@ -1,12 +1,17 @@
 use aoc::prelude::*;
+use once_cell::sync::Lazy;
 
-fn get_item_priority(item: char) -> usize {
+static ALPHABETS: Lazy<Vec<char>> = Lazy::new(|| {
     let mut items = (b'A'..=b'z')
         .map(|c| c as char)
         .filter(|c| c.is_alphabetic())
         .collect_vec();
     items.rotate_left(26);
     items
+});
+
+fn get_item_priority(item: char) -> usize {
+    ALPHABETS
         .iter()
         .find_position(|&c| c.eq(&item))
         .expect("you deserve it")
