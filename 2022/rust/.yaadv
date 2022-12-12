@@ -1,0 +1,3 @@
+(
+    path: Some("../inputs/day{{day}}.in")
+)
