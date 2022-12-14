@@ -10,13 +10,21 @@ static ALPHABETS: Lazy<Vec<char>> = Lazy::new(|| {
     items
 });
 
-fn get_item_priority(item: char) -> usize {
+fn _get_item_priority(item: char) -> usize {
     ALPHABETS
         .iter()
         .find_position(|&c| c.eq(&item))
         .expect("you deserve it")
         .0
         + 1
+}
+
+// ascii -_-
+fn get_item_priority(item: char) -> u8 {
+    if item.is_lowercase() {
+        return item as u8 - b'a' + 1;
+    }
+    item as u8 - b'A' + 26 + 1
 }
 
 fn main() -> Result<()> {
@@ -34,7 +42,7 @@ fn main() -> Result<()> {
                 accum
             })
             .into_iter()
-            .map(get_item_priority)
+            .map(|item| get_item_priority(item) as usize)
             .sum::<usize>()
     );
 
